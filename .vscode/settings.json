@@ -1,6 +1,9 @@
 {
-  "editor.rulers": [80],
+  "editor.rulers": [120],
   "editor.tabSize": 2,
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "python.formatting.provider": "black",
+  "[python]": {
+    "editor.tabSize": 4
+  }
 }
