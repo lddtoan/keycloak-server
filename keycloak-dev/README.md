@@ -14,7 +14,7 @@ chmod u+x run
 
 ## Run
 
-Build and start container
+Build and run container
 
 ```
 ./run
