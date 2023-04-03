@@ -1,6 +1,8 @@
 import os
+import http.client as httplib
 import requests
 from dotenv import load_dotenv
+from urllib import parse
 
 
 LOGIN_URL = "/realms/master/protocol/openid-connect/token"
@@ -12,6 +14,19 @@ class KeycloakClient:
         self.server = os.getenv("KEYCLOAK_SERVER")
         self.realm = os.getenv("KEYCLOAK_REALM")
         self.access_token = None
+
+    def is_online(self) -> bool:
+        hostname = parse.urlparse(self.server).hostname
+        port = parse.urlparse(self.server).port
+        conn = httplib.HTTPConnection(hostname, port, timeout=5)
+        for _ in range(5):
+            try:
+                conn.request("HEAD", "/")
+                return True
+            except:
+                pass
+        conn.close()
+        return False
 
     def login(self) -> None:
         url = f"{self.server}{LOGIN_URL}"
@@ -61,8 +76,14 @@ class KeycloakClient:
             raise Exception("create realm failed")
 
     def setup(self) -> None:
-        self.login()
-        self.create_realm()
+        if self.is_online():
+            self.login()
+            self.create_realm()
+            print("\nkeycloak-dev run success")
+        else:
+            print("\ncannot connect to keycloak")
+            print("keycloak server may still booting")
+            print("you must run this script manually")
 
 
 if __name__ == "__main__":

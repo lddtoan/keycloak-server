@@ -7,6 +7,5 @@ docker compose up -d
 source ./.venv/bin/activate
 pip install -r requirements.txt
 
-# Delay 5 seconds before connect to Keycloak
-sleep 5
+# Create realm in Keycloak
 python client.py
